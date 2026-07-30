@@ -1,16 +1,58 @@
-# React + Vite
+# Skyblue — Window Cleaner SaaS (MVP)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Mobile-first app for solo window cleaners. Three modules:
+1. **Round Planner** — organize jobs by day, optimize driving route on map
+2. **Job Logger** — standardized checklists + before/after photos + auto SMS to customer
+3. **Auto Presence** — prep Google Business Profile posts from completed jobs
 
-Currently, two official plugins are available:
+Stack: React (Vite) + Supabase + Tailwind CSS + Twilio
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Quick Start
 
-## React Compiler
+```bash
+npm install
+cp .env.example .env
+# Edit .env with your Supabase URL and anon key
+npm run dev
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Supabase Setup
 
-## Expanding the Oxlint configuration
+1. Create project at [supabase.com](https://supabase.com)
+2. Run migration in SQL Editor: `supabase/migrations/001_schema.sql`
+3. Copy URL and anon key to `.env`
+4. Enable Auth → Email (disable confirmations for MVP)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+### SMS (Twilio)
+
+Deploy the Edge Function:
+```bash
+supabase functions deploy send-sms --project-ref <your-ref>
+supabase secrets set TWILIO_ACCOUNT_SID=... TWILIO_AUTH_TOKEN=... TWILIO_PHONE_NUMBER=+44...
+```
+
+### Storage
+
+Create bucket `job-photos` (public) in Supabase Dashboard → Storage.
+
+## Deploy
+
+```bash
+npm run build
+npx vercel --prod
+```
+
+Or connect the repo to [Vercel](https://vercel.com) for auto-deploy on push.
+
+Set env vars in Vercel dashboard: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`.
+
+## Extension Points
+
+The schema includes unused columns for future features:
+- `jobs.price` → revenue analytics
+- `jobs.customer_email` → customer portal + reminders
+- `profiles` → Stripe account
+
+## Plan
+
+See `~/.hermes/plans/pjt-skyblue-mvp.md` for full spec.

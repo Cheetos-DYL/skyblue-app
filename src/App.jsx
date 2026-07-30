@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import TodayView from './pages/TodayView'
 import RoundsList from './pages/RoundsList'
 import RoundEdit from './pages/RoundEdit'
@@ -9,7 +9,7 @@ import Nav from './components/Nav'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="min-h-screen pb-16">
         <Nav />
         <main className="max-w-lg mx-auto px-4 py-6">
@@ -23,6 +23,6 @@ export default function App() {
           </Routes>
         </main>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
